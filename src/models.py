@@ -14,6 +14,7 @@ class Post(Base):
     created_at = schema.Column(
         sqltypes.TIMESTAMP(timezone=True),
         nullable=False,
+        # TODO: When using postgresql replace CURRENT_TIMESTAMP with NOW()
         server_default=expression.text("CURRENT_TIMESTAMP"),
     )
 
