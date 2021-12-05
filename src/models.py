@@ -1,7 +1,9 @@
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import schema, sqltypes, expression
 from src.database import Base
 
 
+# TODO: Test CASCADE definitions. Seems not to work with SQLite
 class Post(Base):
     __tablename__ = "posts"
 
@@ -14,6 +16,14 @@ class Post(Base):
         nullable=False,
         server_default=expression.text("CURRENT_TIMESTAMP"),
     )
+
+    owner_id = schema.Column(
+        sqltypes.INTEGER,
+        schema.ForeignKey("users.id", ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False,
+    )
+
+    owner = relationship("User")
 
 
 class User(Base):

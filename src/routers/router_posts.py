@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from typing import List
 from src import database, models
 from src.utils import oauth2
-from src.schemas.request import request_post, request_token
-from src.schemas.response import response_post
+from src.schemas.request import request_post
+from src.schemas.response import response_post, response_user
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -16,7 +16,6 @@ router = APIRouter(prefix="/posts", tags=["posts"])
 )
 def get_all_posts(
     db: Session = Depends(database.get_db),
-    current_user: request_token.TokenData = Depends(oauth2.get_current_user),
 ):
     posts = db.query(models.Post).all()
     return posts
@@ -27,9 +26,13 @@ def get_all_posts(
     status_code=status.HTTP_201_CREATED,
     response_model=response_post.CreatedPost,
 )
-def create_posts(post: request_post.Post, db: Session = Depends(database.get_db)):
+def create_posts(
+    post: request_post.Post,
+    db: Session = Depends(database.get_db),
+    current_user: response_user.ExistingUser = Depends(oauth2.get_current_user),
+):
     post = post.dict()
-    new_post = models.Post(**post)
+    new_post = models.Post(**post, owner_id=current_user.id)
 
     db.add(new_post)
     db.commit()
@@ -55,13 +58,17 @@ def get_one_post(id: int, db: Session = Depends(database.get_db)):
 def delete_one_post(
     id: int,
     db: Session = Depends(database.get_db),
-    current_user: request_token.TokenData = Depends(oauth2.get_current_user),
+    current_user: response_user.ExistingUser = Depends(oauth2.get_current_user),
 ):
     post_query = db.query(models.Post).filter(models.Post.id == id)
-
-    if not post_query.first():
+    post = post_query.first()
+    if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"No post with id {id}"
+        )
+    elif post.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized"
         )
     else:
         post_query.delete(synchronize_session=False)
@@ -79,13 +86,17 @@ def update_one_post(
     id: int,
     post: request_post.Post,
     db: Session = Depends(database.get_db),
-    current_user: request_token.TokenData = Depends(oauth2.get_current_user),
+    current_user: response_user.ExistingUser = Depends(oauth2.get_current_user),
 ):
     post_query = db.query(models.Post).filter(models.Post.id == id)
-
-    if not post_query.first():
+    existing_post = post_query.first()
+    if not existing_post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"No post with id {id}"
+        )
+    elif existing_post.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized"
         )
     else:
         post_query.update(post.dict(), synchronize_session=False)
