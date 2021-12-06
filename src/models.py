@@ -38,3 +38,20 @@ class User(Base):
         nullable=False,
         server_default=expression.text("CURRENT_TIMESTAMP"),
     )
+
+
+class Vote(Base):
+    __tablename__ = "votes"
+
+    user_id = schema.Column(
+        sqltypes.INTEGER,
+        schema.ForeignKey("users.id", ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False,
+        primary_key=True,
+    )
+    post_id = schema.Column(
+        sqltypes.INTEGER,
+        schema.ForeignKey("posts.id", ondelete="CASCADE", onupdate="CASCADE"),
+        nullable=False,
+        primary_key=True,
+    )
