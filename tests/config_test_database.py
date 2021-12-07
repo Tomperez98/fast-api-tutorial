@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import pytest
 
+FIXTURE_SCOPE = "function"
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test_sql_app.db"
 
 engine = create_engine(
@@ -13,7 +14,10 @@ engine = create_engine(
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-def override_get_db():
+@pytest.fixture(scope=FIXTURE_SCOPE)
+def session():
+    database.Base.metadata.drop_all(bind=engine)
+    database.Base.metadata.create_all(bind=engine)
     db = TestingSessionLocal()
     try:
         yield db
@@ -21,11 +25,34 @@ def override_get_db():
         db.close()
 
 
-main.app.dependency_overrides[database.get_db] = override_get_db
+@pytest.fixture(scope=FIXTURE_SCOPE)
+def client(session):
+    def override_get_db():
+        try:
+            yield session
+        finally:
+            session.close()
 
-
-@pytest.fixture
-def client():
-    database.Base.metadata.drop_all(bind=engine)
-    database.Base.metadata.create_all(bind=engine)
+    main.app.dependency_overrides[database.get_db] = override_get_db
     yield TestClient(main.app)
+
+
+############################################################
+
+
+# def override_get_db():
+#     db = TestingSessionLocal()
+#     try:
+#         yield db
+#     finally:
+#         db.close()
+
+
+# main.app.dependency_overrides[database.get_db] = override_get_db
+
+
+# @pytest.fixture
+# def client():
+#     database.Base.metadata.drop_all(bind=engine)
+#     database.Base.metadata.create_all(bind=engine)
+#     yield TestClient(main.app)
