@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import pytest
 
-FIXTURE_SCOPE = "function"
+FIXTURE_SCOPE = "module"
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test_sql_app.db"
 
 engine = create_engine(
@@ -35,24 +35,3 @@ def client(session):
 
     main.app.dependency_overrides[database.get_db] = override_get_db
     yield TestClient(main.app)
-
-
-############################################################
-
-
-# def override_get_db():
-#     db = TestingSessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
-
-
-# main.app.dependency_overrides[database.get_db] = override_get_db
-
-
-# @pytest.fixture
-# def client():
-#     database.Base.metadata.drop_all(bind=engine)
-#     database.Base.metadata.create_all(bind=engine)
-#     yield TestClient(main.app)

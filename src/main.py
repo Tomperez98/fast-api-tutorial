@@ -9,3 +9,8 @@ app.include_router(router_auth.router)
 app.include_router(router_users.router)
 app.include_router(router_posts.router)
 app.include_router(router_votes.router)
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="127.0.0.1", port=8000)
