@@ -1,5 +1,3 @@
-from tests.config_test_database import client, session
-
 
 def test_root(client):
     response = client.get("/")

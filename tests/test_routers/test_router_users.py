@@ -1,4 +1,3 @@
-from tests.config_test_database import client, session
 from src.schemas.response import response_user, response_token
 from src.utils import oauth2
 from jose import jwt
