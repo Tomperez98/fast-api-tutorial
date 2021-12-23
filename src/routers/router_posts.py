@@ -40,8 +40,8 @@ def create_posts(
     db: Session = Depends(database.get_db),
     current_user: response_user.ExistingUser = Depends(oauth2.get_current_user),
 ):
-    post = post.dict()
-    new_post = models.Post(**post, owner_id=current_user.id)
+    post_dict = post.dict()
+    new_post = models.Post(**post_dict, owner_id=current_user.id)
 
     db.add(new_post)
     db.commit()
