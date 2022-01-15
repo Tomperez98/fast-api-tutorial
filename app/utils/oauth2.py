@@ -3,9 +3,9 @@ from pydantic import validate_arguments
 from datetime import datetime, timedelta
 from fastapi import Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from src.schemas.request import request_token
-from src import database, models
-from src.config import settings
+from app.schemas.request import request_token
+from app import database, models
+from app.config import settings
 from sqlalchemy.orm import Session
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")

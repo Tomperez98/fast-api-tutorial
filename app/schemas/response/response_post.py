@@ -1,5 +1,5 @@
-from src.schemas.request import request_post
-from src.schemas.response import response_user
+from app.schemas.request import request_post
+from app.schemas.response import response_user
 from datetime import datetime
 
 

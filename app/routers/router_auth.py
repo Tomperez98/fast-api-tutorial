@@ -2,9 +2,9 @@ from fastapi import Depends, APIRouter, HTTPException, status
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from starlette.status import HTTP_202_ACCEPTED
-from src.schemas.response import response_token
-from src import database, models
-from src.utils import security, oauth2
+from app.schemas.response import response_token
+from app import database, models
+from app.utils import security, oauth2
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 

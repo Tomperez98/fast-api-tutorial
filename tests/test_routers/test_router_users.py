@@ -1,5 +1,5 @@
-from src.schemas.response import response_user, response_token
-from src.utils import oauth2
+from app.schemas.response import response_user, response_token
+from app.utils import oauth2
 from jose import jwt
 
 

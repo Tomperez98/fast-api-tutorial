@@ -1,4 +1,4 @@
-from src import database, main
+from app import database, main
 from fastapi.testclient import TestClient
 import pytest
 from tests import database_conf

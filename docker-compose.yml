@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  rest_api:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 80
+    ports:
+      - 8000:80
+    depends_on:
+      - dev_database
+      - test_database
+    links:
+      - dev_database
+      - test_database
+
+  dev_database:
+    image: postgres:12-alpine
+    env_file:
+      - app/config/app.env
+    ports:
+      - 5432:5432
+
+  test_database:
+    image: postgres:12-alpine
+    env_file:
+      - app/config/app.env
+    ports:
+      - 6543:5432

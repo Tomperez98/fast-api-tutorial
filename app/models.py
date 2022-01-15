@@ -1,6 +1,6 @@
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import schema, sqltypes, expression
-from src.database import Base
+from app.database import Base
 
 
 # TODO: Test CASCADE definitions. Seems not to work with SQLite

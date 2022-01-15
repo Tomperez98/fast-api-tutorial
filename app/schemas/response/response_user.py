@@ -1,4 +1,4 @@
-from src.schemas.request import request_user
+from app.schemas.request import request_user
 from datetime import datetime
 
 
