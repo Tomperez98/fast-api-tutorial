@@ -17,12 +17,12 @@ services:
     image: postgres:12-alpine
     env_file:
       - app/config/app.env
-    ports:
-      - 5432:5432
+    expose:
+      - 5432
 
   test_database:
     image: postgres:12-alpine
     env_file:
       - app/config/app.env
-    ports:
-      - 6543:5432
+    expose:
+      - 6543
