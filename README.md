@@ -11,5 +11,23 @@ then run `pytest`. (note that the `container_id` can be getted using the `docker
 * stop the app: run `docker-compose stop`
 
 * start the app: run `docker-compose up -d`
+
+
+## Env variables
+So the app can runned it expects a `.env` within the following location: `app/config/app.env`.
+This a sample for the required `app.env` file: 
+
+```text
+SECRET_KEY= generated using `openssl rand -base64 32` command
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES= Whatever int you want (I use 30)
+POSTGRES_USER=postgres_user
+POSTGRES_PASSWORD=postgres_password
+HOST_DEV_DB=dev_database --> must match docker-compose component
+HOST_TEST_DB=test_database --> must match docker-compose component
+EXPOSED_PORT= exposed port (default 5432)
+POSTGRES_DB= database to use (example. app_database)
+```
+
 ## Models represents a table within the database
 ## BaseModel is a class used by Pydantic to define strictly types dataclasses
