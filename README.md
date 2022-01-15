@@ -29,5 +29,9 @@ EXPOSED_PORT= exposed port (default 5432)
 POSTGRES_DB= database to use (example. app_database)
 ```
 
+# Development inside docker container
+I recomend to develop within a docker container. 
+Follow this tutorial: https://code.visualstudio.com/docs/remote/containers-tutorial
+
 ## Models represents a table within the database
 ## BaseModel is a class used by Pydantic to define strictly types dataclasses
