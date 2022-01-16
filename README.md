@@ -30,8 +30,13 @@ POSTGRES_DB= database to use (example. app_database)
 ```
 
 # Development inside docker container
-I recomend to develop within a docker container. 
 Follow this tutorial: https://code.visualstudio.com/docs/remote/containers-tutorial
+
+NOTE: Even if possible it's really buggy
+
+# Development locally
+The `docker-compose.yml` setups a volume pointing to the repo. So even if you want to develop
+locally code changes will be automatically detected by the container running the `rest_api` service
 
 ## Models represents a table within the database
 ## BaseModel is a class used by Pydantic to define strictly types dataclasses
