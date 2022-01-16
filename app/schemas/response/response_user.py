@@ -1,5 +1,5 @@
 from app.schemas.request import request_user
-from datetime import datetime
+import datetime
 
 
 class CreatedUser(request_user.NoPasswordUser):
@@ -12,7 +12,7 @@ class CreatedUser(request_user.NoPasswordUser):
 class ExistingUser(request_user.NoPasswordUser):
     id: int
     email: str
-    created_at: datetime
+    created_at: datetime.datetime
 
     class Config:
         orm_mode = True

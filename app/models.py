@@ -1,4 +1,4 @@
-from sqlalchemy.orm import relationship
+from sqlalchemy import orm
 from sqlalchemy.sql import schema, sqltypes, expression
 from app.database import Base
 
@@ -23,7 +23,7 @@ class Post(Base):
         nullable=False,
     )
 
-    owner = relationship("User")
+    owner = orm.relationship("User")
 
 
 class User(Base):

@@ -1,8 +1,8 @@
 import pydantic
-from enum import Enum
+import enum
 
 
-class Direction(int, Enum):
+class Direction(int, enum.Enum):
     ZERO = 0
     ONE = 1
 

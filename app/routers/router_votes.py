@@ -1,24 +1,25 @@
-from fastapi import status, Depends, HTTPException, APIRouter
-from sqlalchemy.orm import Session
+import fastapi
+from fastapi import status
+from sqlalchemy import orm
 from app import database, models
-from app.utils import oauth2
+from app.utils import auth
 from app.schemas.request import request_vote
 from app.schemas.response import response_user
 
 
-router = APIRouter(prefix="/votes", tags=["votes"])
+router = fastapi.APIRouter(prefix="/votes", tags=["votes"])
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def vote(
     vote: request_vote.CreateVote,
-    db: Session = Depends(database.get_db),
-    current_user: response_user.ExistingUser = Depends(oauth2.get_current_user),
+    db: orm.Session = fastapi.Depends(database.get_db),
+    current_user: response_user.ExistingUser = fastapi.Depends(auth.get_current_user),
 ):
     post_query = db.query(models.Post).filter(models.Post.id == vote.post_id)
     post_exists = post_query.first()
     if not post_exists:
-        raise HTTPException(
+        raise fastapi.HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"post with id {vote.post_id} does not exists",
         )
@@ -30,7 +31,7 @@ def vote(
 
     if vote.dir == 1:
         if found_vote:
-            raise HTTPException(
+            raise fastapi.HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail=f"user {current_user.id} has already vote post {vote.post_id}",
             )
@@ -41,7 +42,7 @@ def vote(
             return {"message": "vote successfully added"}
     elif vote.dir == 0:
         if not found_vote:
-            raise HTTPException(
+            raise fastapi.HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"There's no vote for post {vote.post_id} by user {current_user.id}",
             )

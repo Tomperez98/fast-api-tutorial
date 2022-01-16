@@ -1,10 +1,10 @@
 from passlib import context
-from pydantic import validate_arguments
+import pydantic
 
 pwd_context = context.CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-@validate_arguments
+@pydantic.validate_arguments
 def password_hasher(plain_password: str) -> str:
     """Function password_hasher is intented to be used to
     hash passwords before adding data within the
@@ -19,7 +19,7 @@ def password_hasher(plain_password: str) -> str:
     return pwd_context.hash(plain_password)
 
 
-@validate_arguments
+@pydantic.validate_arguments
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Function verify_password is intented to be used to
     verify that a plain password passed and a hashed password

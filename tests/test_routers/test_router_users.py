@@ -1,5 +1,5 @@
 from app.schemas.response import response_user, response_token
-from app.utils import oauth2
+from app.utils import auth
 from jose import jwt
 
 
@@ -24,8 +24,8 @@ def test_login_user(client):
     login_res = response_token.PlainToken(**response.json())
     payload = jwt.decode(
         token=login_res.access_token,
-        key=oauth2.SECRET_KEY,
-        algorithms=[oauth2.ALGORITHM],
+        key=auth.SECRET_KEY,
+        algorithms=[auth.ALGORITHM],
     )
     user_id = payload.get("user_id")
     assert response.status_code == 202
