@@ -3,7 +3,7 @@ version: '3'
 services:
   rest_api:
     build: .
-    command: uvicorn app.main:app --host 0.0.0.0 --port 80
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 80
     ports:
       - 8000:80
     depends_on:
@@ -12,6 +12,8 @@ services:
     links:
       - dev_database
       - test_database
+    volumes:
+      - ./:/code/
 
   dev_database:
     image: postgres:12-alpine
