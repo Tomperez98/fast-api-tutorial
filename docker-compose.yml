@@ -17,6 +17,7 @@ services:
 
   dev_database:
     image: postgres:12-alpine
+    restart: always
     env_file:
       - app/config/app.env
     expose:
@@ -24,7 +25,23 @@ services:
 
   test_database:
     image: postgres:12-alpine
+    restart: always
     env_file:
       - app/config/app.env
     expose:
       - 6543
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - 5050:80
+    depends_on:
+      - dev_database
+      - test_database
+    links:
+      - dev_database
+      - test_database
