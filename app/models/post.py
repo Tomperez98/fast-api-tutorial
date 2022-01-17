@@ -24,33 +24,3 @@ class Post(Base):
     )
 
     owner = orm.relationship("User")
-
-
-class User(Base):
-    __tablename__ = "users"
-
-    id = schema.Column(sqltypes.INTEGER, primary_key=True, nullable=False)
-    email = schema.Column(sqltypes.VARCHAR, nullable=False, unique=True)
-    password = schema.Column(sqltypes.VARCHAR, nullable=False)
-    created_at = schema.Column(
-        sqltypes.TIMESTAMP(timezone=True),
-        nullable=False,
-        server_default=expression.text("CURRENT_TIMESTAMP"),
-    )
-
-
-class Vote(Base):
-    __tablename__ = "votes"
-
-    user_id = schema.Column(
-        sqltypes.INTEGER,
-        schema.ForeignKey("users.id", ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False,
-        primary_key=True,
-    )
-    post_id = schema.Column(
-        sqltypes.INTEGER,
-        schema.ForeignKey("posts.id", ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False,
-        primary_key=True,
-    )
