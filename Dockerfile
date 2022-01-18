@@ -1,16 +1,24 @@
-# 
+# Base image
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
 
-# 
-WORKDIR /code
+# Defining ENV variables
+ENV PROJECT_DIR /code
+
+# cd to project_dir
+WORKDIR ${PROJECT_DIR}
 
 # 
-COPY ./requirements.txt /code/requirements.txt
+COPY Pipfile Pipfile.lock ${PROJECT_DIR}/
+
+RUN pip install pipenv && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends gcc python3-dev libssl-dev && \
+    pipenv install --deploy --system && \
+    apt-get remove -y gcc python3-dev libssl-dev && \
+    apt-get autoremove -y && \
+    pip uninstall pipenv -y
 
 # 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-
-# 
-COPY ./app /code/app
-COPY ./tests /code/tests
+COPY ./app ${PROJECT_DIR}/app
+COPY ./tests ${PROJECT_DIR}/tests
 

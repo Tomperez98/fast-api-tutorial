@@ -19,4 +19,4 @@ class Settings(pydantic.BaseSettings):
         env_file = "app/config/app.env"
 
 
-defined_settings = Settings()
+defined_settings = Settings()  # type: ignore

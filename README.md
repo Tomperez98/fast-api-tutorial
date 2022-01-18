@@ -12,7 +12,9 @@ then run `pytest`. (note that the `container_id` can be getted using the `docker
 
 * start the app: run `docker-compose up -d`
 
+## Managed dependencies
 
+The proyect used to have a `requirements.txt` file with dependencies. Not we are using [`pipenv`](https://pipenv.pypa.io/en/latest/) to handle dependencies. In case you don't have pipenv installed and wanted to setup a development environment locally just install pipenv and run the command `pipenv shell` in the same file location than `Pipfile` and `Pipfile.locks`
 ## Env variables
 So the app can runned it expects a `.env` within the following location: `app/config/app.env`.
 This a sample for the required `app.env` file: 
