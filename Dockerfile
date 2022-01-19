@@ -1,16 +1,21 @@
-# 
+# Base image
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
 
-# 
-WORKDIR /code
+# Defining ENV variables
+ENV PROJECT_DIR /code
+
+# cd to project_dir
+WORKDIR ${PROJECT_DIR}
 
 # 
-COPY ./requirements.txt /code/requirements.txt
+COPY Pipfile Pipfile.lock ${PROJECT_DIR}/
+
+RUN pip install pipenv && \
+    pipenv lock --keep-outdated --requirements > /tmp/requirements.txt && \
+    pip install -r /tmp/requirements.txt && \
+    pip uninstall pipenv -y
 
 # 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-
-# 
-COPY ./app /code/app
-COPY ./tests /code/tests
+COPY ./app ${PROJECT_DIR}/app
+COPY ./tests ${PROJECT_DIR}/tests
 
