@@ -11,11 +11,8 @@ WORKDIR ${PROJECT_DIR}
 COPY Pipfile Pipfile.lock ${PROJECT_DIR}/
 
 RUN pip install pipenv && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends gcc python3-dev libssl-dev && \
-    pipenv install --deploy --system && \
-    apt-get remove -y gcc python3-dev libssl-dev && \
-    apt-get autoremove -y && \
+    pipenv lock --keep-outdated --requirements > /tmp/requirements.txt && \
+    pip install -r /tmp/requirements.txt && \
     pip uninstall pipenv -y
 
 # 
